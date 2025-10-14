@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>網頁切版練習</title>
+
+    <link rel="stylesheet" type="text/css" href="./style.css">
+</head>
+
+<body>
+    <!-- 導覽列 -->
+    <div class="navbar">
+        <div class="title">My Website</div>
+        <div class="menu">
+            <div class="menu-item">Item 1</div>
+            <div class="menu-item">Item 2</div>
+            <div class="menu-item">Item 3</div>
+            <div class="menu-item">Item 4</div>
+        </div>
+        <div class="hamburger-icon" onclick="openMenu()"><img src="./img/menu.png" alt="hamburger icon"></div>
+    </div>
+
+    <div class="popup-menu" id="popup-menu">
+        <div class="close-icon" onclick="closeMenu()"><img src="./img/close.png" alt="closs icon"></div>
+        <div class="popup-menu-list">
+            <div class="popup-menu-item">Item 1</div>
+            <div class="popup-menu-item">Item 2</div>
+            <div class="popup-menu-item">Item 3</div>
+            <div class="popup-menu-item">Item 4</div>
+        </div>
+    </div>
+
+    <!-- 大標題 -->
+    <div class="welcome-container">
+        <p>Welcome to MyHome</p>
+    </div>
+
+    <!-- 主要內容區 -->
+    <div class="main-content">
+        <div class="content-container">
+            <!-- Bars -->
+            <div class="bar lg-12 md-6 sm-12">
+                <div class="bar-img"><img src="./img/quokka.jpg" alt="圖片"></div>
+                <div class="bar-text">Promotion 1</div>
+            </div>
+            <div class="bar lg-8 md-6 sm-12">
+                <div class="bar-img"><img src="./img/quokka.jpg" alt="圖片"></div>
+                <div class="bar-text">Promotion 2</div>
+            </div>
+            <div class="bar lg-4 md-12 sm-12">
+                <div class="bar-img"><img src="./img/quokka.jpg" alt="圖片"></div>
+                <div class="bar-text">Promotion 3</div>
+            </div>
+
+            <!-- Content Blocks -->
+            <div class="block lg-4 md-3 sm-12">
+                <div class="block-star"><img src="./img/star.png" alt="star"></div>
+                <div class="block-text">Title 1</div>
+            </div>
+            <div class="block lg-2 md-3 sm-12">
+                <div class="block-star"><img src="./img/star.png" alt="star"></div>
+                <div class="block-text">Title 2</div>
+            </div>
+            <div class="block lg-2 md-3 sm-12">
+                <div class="block-star"><img src="./img/star.png" alt="star"></div>
+                <div class="block-text">Title 3</div>
+            </div>
+            <div class="block lg-2 md-3 sm-12">
+                <div class="block-star"><img src="./img/star.png" alt="star"></div>
+                <div class="block-text">Title 4</div>
+            </div>
+            <div class="block lg-2 md-3 sm-12">
+                <div class="block-star"><img src="./img/star.png" alt="star"></div>
+                <div class="block-text">Title 5</div>
+            </div>
+            <div class="block lg-4 md-3 sm-12">
+                <div class="block-star"><img src="./img/star.png" alt="star"></div>
+                <div class="block-text">Title 6</div>
+            </div>
+            <div class="block lg-2 md-3 sm-12">
+                <div class="block-star"><img src="./img/star.png" alt="star"></div>
+                <div class="block-text">Title 7</div>
+            </div>
+            <div class="block lg-2 md-3 sm-12">
+                <div class="block-star"><img src="./img/star.png" alt="star"></div>
+                <div class="block-text">Title 8</div>
+            </div>
+            <div class="block lg-2 md-6 sm-12">
+                <div class="block-star"><img src="./img/star.png" alt="star"></div>
+                <div class="block-text">Title 9</div>
+            </div>
+            <div class="block lg-2 md-6 sm-12">
+                <div class="block-star"><img src="./img/star.png" alt="star"></div>
+                <div class="block-text">Title 10</div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+
+<script>
+    // 導覽選單收合
+    function openMenu() {
+        document.getElementById("popup-menu").classList.add("show");
+    }
+
+    function closeMenu() {
+        document.getElementById("popup-menu").classList.remove("show");
+    }
+</script>
+</html>
