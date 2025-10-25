@@ -7,7 +7,7 @@ function func1(name){
         {name: "悟空", x: 0, y: 0, side: "L"},
         {name: "特南克斯", x: 1, y: -2, side: "L"},
         {name: "丁滿", x: -1, y: 4, side: "R"},
-        {name: "弗利沙", x: 4, y: -1, side: "R"},
+        {name: "弗利沙", x: 4, y: -1, side: "R"}
     ];
     // 在陣列中依序尋找第一個符合角色名稱的 Object
     const target = points.find(p => p.name === name);
@@ -80,9 +80,9 @@ function func2(ss, start, end, criteria){
     const [, key, operations, value] = match; // 指派各項常數
     
     // 查詢特定服務是否可預約
-    let isBooking = (name) => {
+    let canBooking = (service) => {
         // 用 .filter 篩選指定 service
-        let serviceBookings = bookings.filter(b => b.service == name);
+        let serviceBookings = bookings.filter(b => b.service == service);
         // 遍歷每個已預約時段
         for (let b of serviceBookings) {
             // 判斷時段是否重疊
@@ -95,7 +95,7 @@ function func2(ss, start, end, criteria){
     // 開始判斷條件
     if (key === "name") {
         // 偵測指定 service 是否有空缺時間
-        if (isBooking(value)) { 
+        if (canBooking(value)) { 
             // 紀錄預約時間及服務項目
             bookings.push({start: start, end: end, service: value});
             return console.log(value); // 回傳結果
@@ -111,10 +111,10 @@ function func2(ss, start, end, criteria){
         // 用 .sort 排序，與條件 value 越靠近排越前面
         availableServices.sort((a, b) => Math.abs(a[key] - value) - Math.abs(b[key] - value));
 
-        // 遍歷可行的服務
+        // 依剩餘的服務檢查是否有時間預約
         for (let s of availableServices) {
             // 偵測對應 service 是否有空缺時間
-            if (isBooking(s.name)) {
+            if (canBooking(s.name)) {
                 // 有就紀錄並回傳
                 bookings.push({start: start, end: end, service: s.name});
                 return console.log(s.name);
@@ -176,40 +176,38 @@ console.log("======================================")
 //#region Task4
 function func4(sp, stat, n){
     const statArray = [...stat]; // 用展開運算子將 stat 拆成陣列
-    let bestSub;  // 紀錄最佳"差值"的容器，用來比較"差值"
-    let fitCarIndex;  // 紀錄最合適車廂編號
+    let bestSpaces;  // 紀錄最佳"差值"的容器，用來比較"差值"
+    let bestSpacesIndex;  // 紀錄最合適車廂編號
 
     // 遍歷所有車廂
     for (let i=0; i<statArray.length; i++) {
         // 篩選可用車廂
         if (statArray[i] == "0") {
-            let sub = sp[i] - n;   // 計算"車廂可乘坐人數"與"乘客數"的差值
-
-            // 如果 bestSub 還是預設值，直接汰換初始值
-            if (bestSub === undefined) {
-                fitCarIndex = i;
-                bestSub = sub;
+            // 如果 bestSpaces 還是預設值，直接汰換初始值
+            if (bestSpaces === undefined) {
+                bestSpacesIndex = i;
+                bestSpaces = sp[i];
             }
 
             // 計算最合適車廂
-            if (sub === 0) { // 一定是最合適的，直接輸出結果 index
+            if (sp[i] === n) {   // 最符合，直接輸出結果
                 return console.log(i);
-            }else if (sub > 0) { 
-                // 塞的下的車廂(>0)優先於塞不下的車廂(<0) or 越接近乘車人數的優先
-                if (bestSub < 0 || sub < bestSub) {
-                    fitCarIndex = i;
-                    bestSub = sub;
+            }else if (sp[i] > n) {    // 座位數比乘客數多
+                // 至今"最佳座位數"少於"乘客數"或多於"此車廂座位數"，調換優先集
+                if (bestSpaces < n || sp[i] < bestSpaces) {
+                    bestSpacesIndex = i;
+                    bestSpaces = sp[i];
                 }
-            }else if (sub < 0) {
-                // 越接近乘車人數的優先
-                if(bestSub < sub) {
-                    fitCarIndex = i;
-                    bestSub = sub;
+            }else if (sp[i] < n) {    // 座位數比乘客數少
+                // 且至今"最佳座位數"還少於"此車廂座位數"，調換優先集
+                if(bestSpaces < sp[i]) {
+                    bestSpacesIndex = i;
+                    bestSpaces = sp[i];
                 }
             }
         }
     }
-    return console.log(fitCarIndex);
+    return console.log(bestSpacesIndex);
     
 } 
 func4([3, 1, 5, 4, 3, 2], "101000", 2);  // print 5 
@@ -217,3 +215,4 @@ func4([1, 0, 5, 1, 3], "10100", 4);  // print 4
 func4([4, 6, 5, 8], "1000", 4);  // print 2 
 
 //#endregion
+
