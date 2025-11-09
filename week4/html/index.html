@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登入頁面</title>
+
+    <!-- 一定要用 Template(jinja2) 取路徑才能夠動態更改 -->
+    <link rel="stylesheet" href="{{ url_for('css', path='/style.css') }}">
+</head>
+<body>
+    <form class="block" action="/login" method="post">
+        <div class="title">歡迎光臨，請輸入信箱密碼</div>
+        <div class="content">
+            <div class="content-title">登入系統</div>
+            <div class="flex">
+                <label for="email">信箱</label>
+                <input class="textbox" type="email" id="email" name="email" placeholder="">
+            </div>
+            <div class="flex">
+                <label for="password">密碼</label>
+                <input class="textbox" type="password" id="password" name="password" placeholder="">
+            </div>
+            <div class="flex">
+                <label for="agree">同意條款</label>
+                <input type="checkbox" id="agree">
+            </div>
+            <input onclick="checkFields(event)" class="submit" type="submit" id="login-submit" value="登入">
+        </div>
+    </form>
+    <div class="block">
+        <div class="content">
+            <div class="content-title">取得旅館資訊</div>
+            <div class="flex">
+                <label for="ID">編號</label>
+                <input class="textbox" type="number" id="hotel-id" name="ID">
+            </div>
+            <input onclick="serchHotelInfo()" class="submit" type="submit" id="hotel-button" value="取得">
+        </div>
+    </div>
+
+    <script>
+        // 確認"同意條款"是否勾選
+        function checkFields(event) {
+            const checkbox = document.querySelector("#agree");
+            if (!checkbox.checked) {
+                alert("請勾選同意條款");
+                event.preventDefault();
+            }
+        }
+
+        // 檢查輸入值、導向網址、發出請求
+        function serchHotelInfo() {
+            // 抓輸入ID的值
+            const hotelID = Number(document.getElementById("hotel-id").value);
+            // 確認為正整數
+            if (hotelID <= 0) {
+                alert("請輸入正整數");
+                event.preventDefault();
+                return
+            }
+
+            // 組合路徑再直接導向頁面
+            window.location.href = `/hotel/${hotelID}`;
+        }
+    </script>
+</body>
+</html>
