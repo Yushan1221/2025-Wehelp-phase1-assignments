@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>註冊登入頁面</title>
+
+    <!-- 一定要用 Template(jinja2) 取路徑才能夠動態更改 -->
+    <link rel="stylesheet" href="{{ url_for('css', path='/style.css') }}">
+</head>
+<body>
+    <form class="block" action="/signup" method="post">
+        <div class="title">歡迎光臨，請註冊登入系統</div>
+        <div class="content">
+            <div class="content-title">註冊帳號</div>
+            <div class="flex">
+                <label for="name">姓名</label>
+                <input class="textbox" type="text" id="signup-name" name="name" placeholder="" required>
+            </div>
+            <div class="flex">
+                <label for="email">信箱</label>
+                <input class="textbox" type="email" id="signup-email" name="email" placeholder="" required>
+            </div>
+            <div class="flex">
+                <label for="password">密碼</label>
+                <input class="textbox" type="password" id="signup-password" name="password" placeholder="" required>
+            </div>
+            <input class="submit" type="submit" id="signup-submit" value="註冊">
+        </div>
+    </form>
+    <form class="block" action="/login" method="post">
+        <div class="content">
+            <div class="content-title">登入系統</div>
+            <div class="flex">
+                <label for="email">信箱</label>
+                <input class="textbox" type="email" id="login-email" name="email" placeholder="" required>
+            </div>
+            <div class="flex">
+                <label for="password">密碼</label>
+                <input class="textbox" type="password" id="login-password" name="password" placeholder="" required>
+            </div>
+            <input class="submit" type="submit" id="login-submit" value="登入">
+        </div>
+    </form>
+</body>
+</html>

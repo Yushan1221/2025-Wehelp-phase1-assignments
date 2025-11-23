@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登入成功</title>
+
+    <!-- 一定要用 Template(jinja2) 取"路由名稱"也就是name="css"的css才能夠動態更改 -->
+    <link rel="stylesheet" href="{{ url_for('css', path='/style.css') }}">
+</head>
+<body>
+    <form class="block" action="/login" method="post">
+        <div class="title">歡迎光臨，這是會員頁</div>
+        <div class="content">
+            <div class="content-text">{{ name }}，成功登入系統</div>
+            <div class="content-link"><a href="/logout">登出系統</a></div>
+        </div>
+    </form>
+    <form class="comment-block" action="/createMessage" method="post">
+        <div class="comment-title">快來留言吧</div>
+        <div class="flex">
+            <label for="comment">內容</label>
+            <input class="textbox" type="text" id="comment" name="comment" placeholder="" required>
+        </div>
+        <input class="submit" type="submit" id="comment-submit" value="送出">
+    </form>
+    <div class="comment-block" id="comment-container"></div>
+
+    <script>
+
+        // 顯示留言
+        const commentList = JSON.parse('{{ comments | tojson | safe }}');
+        let commentContainer = document.getElementById("comment-container");
+        const userId = JSON.parse('{{ id | tojson | safe }}');
+        for (let c of commentList) {
+            let div = document.createElement("div");
+            let divName = document.createElement("div");
+            let divComment = document.createElement("div");
+
+            div.appendChild(divName);
+            div.appendChild(divComment);
+            commentContainer.appendChild(div);
+
+            divName.textContent = c[0]+":";
+            divComment.textContent = c[1];
+
+            div.classList.add("comment-line")
+            divName.classList.add("comment-name")
+
+            // 顯示刪除留言按鈕
+            if(c[2] == userId) {
+                // 建立delete button
+                let deleteButton = document.createElement("div");                
+                div.appendChild(deleteButton);
+                deleteButton.textContent = "X";
+                deleteButton.classList.add("delete-button");
+                
+                // 標記留言 id
+                deleteButton.dataset.id = c[3];
+            }
+        }
+        
+        let userComment = document.getElementsByClassName("delete-button");
+        for(let u of userComment) {
+            u.addEventListener("click", () => {
+                const commentId = u.dataset.id;
+                const canDelete = confirm("確定要刪除嗎?");
+                
+                if(canDelete) {
+                    fetch("/deleteMessage",{
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({id: commentId})
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if(data.success) {
+                            window.location.href = "/member";
+                        }
+                        else {
+                            alert("刪除失敗：" + data.message);
+                        }
+                    })
+                    .catch(err => console.error(err))
+                }
+            })
+        }
+        
+    </script>
+</body>
+</html>
