@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登入成功</title>
+
+    <!-- 一定要用 Template(jinja2) 取"路由名稱"也就是name="css"的css才能夠動態更改 -->
+    <link rel="stylesheet" href="{{ url_for('css', path='/style.css') }}">
+</head>
+<body>
+    <form class="block" action="/login" method="post">
+        <div class="title">歡迎光臨，這是會員頁</div>
+        <div class="content">
+            <div class="content-text">{{ name }}，成功登入系統</div>
+            <div class="content-link"><a href="/logout">登出系統</a></div>
+        </div>
+    </form>
+    <div class="function-block">
+        <div class="function-title">查詢會員姓名</div>
+        <div class="flex">
+            <input class="textbox" type="number" id="query-textbox" name="query-textbox" placeholder="請輸入會員編號" required>
+            <input onclick="queryMember()" class="submit function-button" type="button" id="query-button" value="查詢">
+        </div>
+        <div id="member-container"></div>
+
+        <div class="function-title">更新我的姓名</div>
+        <div class="flex">
+            <input class="textbox" type="text" id="update-name-textbox" name="update-name-textbox" placeholder="請輸入更新姓名" required>
+            <input onclick="updateName()" class="submit function-button" type="button" id="update-name-button" value="更新">
+        </div>
+        <div id="update-container"></div>
+
+        <div class="function-title">誰查詢了我</div>
+        <input onclick="trackMemberQueries()" class="submit function-button" type="button" id="query-button" value="更新">
+        <div id="queries-container"></div>
+    
+    </div>
+
+    <script>
+        
+        // 查詢會員資訊
+        function queryMember() {
+            // 確認有輸入值並且存取輸入值
+            let memberId = document.getElementById("query-textbox").value.trim();
+            if (!memberId) {
+                alert("請輸入會員編號！");
+                return;
+            }
+
+            // 用 fetch 傳 request 到後端
+            fetch(`/api/member/${memberId}`,{ method: "POST" })
+            .then((res) => res.json())
+            .then((res) => {
+                // 建立顯示會員資料的 div
+                const div = document.getElementById("member-container");
+                let divMember = document.createElement("div");
+                div.appendChild(divMember);
+                divMember.classList.add("data-block");
+                // 依照回傳值data顯示不同資訊
+                if(res["data"]) { // data物件不為空，顯示會員資訊
+                    const name = res["data"]["name"];
+                    const email = res["data"]["email"];
+
+                    divMember.textContent = `${name}（${email}）`;
+                }
+                else { // data物件為空，顯示 No Data
+                    divMember.textContent = "No Data";
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            })
+        }
+
+        // 更新會員姓名
+        function updateName() {
+            // 確認有輸入值並且存取輸入值
+            let updateName = document.getElementById("update-name-textbox").value.trim();
+            if (!updateName) {
+                alert("請輸入更新姓名！");
+                return;
+            }
+
+            // 用 fetch 傳 request 到後端
+            fetch("/api/member", {
+                method: "PATCH",
+                headers: { "Content-Type": " application/json"},
+                body: JSON.stringify({ // JSON.stringify 把物件轉成 JSON 字串
+                    "name": updateName
+                })
+            }).then(res => res.json())
+            .then(res => {
+                let updateState = document.getElementById("update-container");
+                if (res.ok) {
+                    updateState.textContent = "更新成功";
+                }
+                else if (res.error) {
+                    updateState.textContent = "更新失敗";
+                }
+            })
+            .catch(err => console.error(err))
+        }
+
+
+        // 被查詢紀錄
+        function trackMemberQueries() {
+            fetch("/api/memberQueries", {method: "GET"}) // 查詢紀錄用 GET
+            .then(res => res.json())
+            .then(res => {
+                let div = document.getElementById("queries-container")
+                div.innerHTML = ""; // 先清空內容
+                if (res.data) { // 有查詢紀錄
+                    // 遍歷每筆紀錄並顯示
+                    for (let d of res.data) {
+                        let name = d[0]; // 會員姓名
+                        let time = d[1].replace("T", " "); // 原格式yyyy-mm-ddThh:mm:ss，替換 T 為空格
+                        let divQuery = document.createElement("div");
+                        div.appendChild(divQuery);
+                        divQuery.classList.add("data-block");
+                        divQuery.textContent = `${name}(${time})`;
+                    }
+                }
+                else {
+                    // 確認不是 sql-error 才顯示無查詢紀錄
+                    if(!res["sql-error"]) {
+                        div.textContent = "無查詢紀錄"
+                    }
+                }
+            })
+            .catch(err => console.error(err))
+        }
+    </script>
+</body>
+</html>

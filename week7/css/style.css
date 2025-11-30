@@ -113,7 +113,7 @@ input[type="checkbox"] {
 
 
 /* 留言 */
-.comment-block {
+.function-block {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -124,14 +124,18 @@ input[type="checkbox"] {
     padding: 20px;
 }
 
-.comment-title {
+.function-title {
     font-size: 1.25rem;
     font-weight: bold;
     margin-bottom: 10px;
     color: black;
 }
 
-.comment-line {
+.function-button {
+    margin: 0;
+}
+
+.data-block {
     display: flex;
     justify-content: center;
     align-items: center;

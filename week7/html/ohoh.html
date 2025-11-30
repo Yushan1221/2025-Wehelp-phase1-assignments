@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登入失敗</title>
+
+    <!-- 一定要用 Template(jinja2) 取路徑才能夠動態更改 -->
+    <link rel="stylesheet" href="{{ url_for('css', path='/style.css') }}">
+</head>
+<body>
+    <form class="block" action="/login" method="post">
+        <div class="title">失敗頁面</div>
+        <div class="content">
+            <div class="content-text">{{msg}}</div>
+        </div>
+    </form>
+</body>
+</html>
